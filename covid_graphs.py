@@ -3,7 +3,7 @@
 """
 Created on Sun Mar 15 21:41:33 2020
 
-@author: sebas
+@author: sloschert
 """
 
 import pandas as pd
@@ -24,9 +24,9 @@ else:
 # read files
 conf = pd.read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
 death = pd.read_csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv")
-                    
+
 dates = conf.columns[4:]
-days_available = len(dates) 
+days_available = len(dates)
 chosen_days = dates[days_available - (days_to_look_back):]
 info_prompt = "Data for {} for last {} days\n(Data available for {} days)\nLast data ingestion: {}"\
     .format( country, days_to_look_back, days_available, chosen_days[-1])
@@ -43,7 +43,7 @@ death_numbers = []
 for date in chosen_days:
     conf_numbers.append(country_conf[date].sum())
     death_numbers.append(country_death[date].sum())
-  
+
 # deathrate in last x days
 incrDList = []
 for i in range(1, days_to_look_back):
@@ -105,4 +105,3 @@ ax.spines["right"].set_color('none')
 
 plt.tight_layout()
 plt.show()
-
