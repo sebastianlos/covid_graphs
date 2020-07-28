@@ -8,12 +8,12 @@ The data is based on "[JHU CSSE COVID-19 Data](https://github.com/CSSEGISandData
 Usage
 ---------
 
-Execute the python-file `covid_graphs.py` from terminal, passing two arguments:
+Execute the python-file `covid_graphs.py` from bash, passing two arguments:
 
-<ul>
-<li> Country (see `country_names.txt` for a list of valid country names) </li>
-<li> Number of days you want to retrieve data for. </li>
-</ul>
+
+* Country. See `country_names.txt` for a list of valid country names.
+* Number of days.
+
 
 Example
 ---------
