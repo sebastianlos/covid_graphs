@@ -1,5 +1,5 @@
 """
-Generates textfile with valid country names.
+Generates textfile with valid country names
 """
 
 import pandas as pd
