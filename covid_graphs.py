@@ -18,16 +18,16 @@ elif len(sys.argv) > 2:
     COUNTRY = sys.argv[1]
     DAYS_TO_LOOK_BACK = int(sys.argv[2])
 else:
-    COUNTRY = "United Kingdom"
-    DAYS_TO_LOOK_BACK = 20
+    COUNTRY = "Germany"
+    DAYS_TO_LOOK_BACK = 100
 
 # read files
 conf = pd.read_csv("https://raw.githubusercontent.com/CSSEGISandData/\
-    COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/\
-    time_series_covid19_confirmed_global.csv")
+COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/\
+time_series_covid19_confirmed_global.csv")
 death = pd.read_csv("https://raw.githubusercontent.com/CSSEGISandData/\
-    COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/\
-    time_series_covid19_deaths_global.csv")
+COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/\
+time_series_covid19_deaths_global.csv")
 
 dates = conf.columns[4:]
 days_available = len(dates)
