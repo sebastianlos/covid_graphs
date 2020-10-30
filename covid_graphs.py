@@ -67,7 +67,8 @@ for i in range(1, DAYS_TO_LOOK_BACK):
     if death_numbers[-i-1] != 0:
         INCR = (death_numbers[-i] - death_numbers[-i-1])/death_numbers[-i-1]
     else:
-        INCR = 0                # instead of infinite: 0
+        # instead of infinite: 0
+        INCR = 0
     incrDList.append(INCR*100)
 incrDList = incrDList[::-1]
 
@@ -93,7 +94,7 @@ plt.plot_date(pd.to_datetime(conf_plot.keys().values),
               label=f"confirmed: {format(conf_numbers[-1])}")
 plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%m/%d"))
 plt.title(COUNTRY + " (confirmed)")
-plt.xticks(rotation=45)
+plt.xticks(rotation=30)
 plt.legend()
 
 
@@ -109,7 +110,7 @@ plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%m/%d"))
 plt.plot([], [], " ", label="(deaths/conf = {:.2%})"
          .format(death_numbers[-1]/conf_numbers[-1]))
 plt.title(COUNTRY + " (deaths)")
-plt.xticks(rotation=45)
+plt.xticks(rotation=30)
 plt.legend()
 
 
@@ -121,8 +122,8 @@ plt.title(COUNTRY + " (rates)")
 plt.xlabel("Days")
 plt.ylabel("Percentage")
 # calculating ylim from mean
-plt.ylim(0, max(pd.Series(incrCList).mean(),
-                pd.Series(incrDList).mean()) * 3.5)
+# plt.ylim(0, max(pd.Series(incrCList).mean(),
+#                 pd.Series(incrDList).mean()) * 3.5)
 plt.legend()
 
 
