@@ -128,7 +128,13 @@ plt.legend()
 
 
 plt.subplot(2, 2, 4)
-
+plt.xticks(())
+plt.yticks(())
+ax = plt.gca()
+ax.spines["top"].set_color('none')
+ax.spines["bottom"].set_color('none')
+ax.spines["left"].set_color('none')
+ax.spines["right"].set_color('none')
 
 plt.tight_layout()
 plt.show()
