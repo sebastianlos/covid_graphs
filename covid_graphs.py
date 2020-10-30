@@ -10,6 +10,7 @@ import sys
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 # read files
 conf = pd.read_csv("https://raw.githubusercontent.com/CSSEGISandData/\
@@ -24,6 +25,8 @@ days_available = len(dates)
 
 DEFAULT_COUNTRY = "Germany"
 DEFAULT_DAYS = 100
+COUNTRY = DEFAULT_COUNTRY
+DAYS_TO_LOOK_BACK = DEFAULT_DAYS
 
 # user input
 if len(sys.argv) == 2:
@@ -43,9 +46,9 @@ if DAYS_TO_LOOK_BACK > days_available:
     print("setting days to maximum available")
 
 chosen_days = dates[days_available - (DAYS_TO_LOOK_BACK):]
-INFO_PROMPT = "Data for {} for last {} days\n(Data available for {} days)\n\
-    Last data ingestion: {}"\
-    .format(COUNTRY, DAYS_TO_LOOK_BACK, days_available, chosen_days[-1])
+INFO_PROMPT = "Data for {} for last {} days\
+\n(Last data ingestion: {})"\
+    .format(COUNTRY, DAYS_TO_LOOK_BACK, chosen_days[-1])
 
 # per COUNTRY
 country_conf = conf.groupby("Country/Region").get_group(COUNTRY)
@@ -78,22 +81,31 @@ for i in range(1, DAYS_TO_LOOK_BACK):
     incrCList.append(INCR*100)
 incrCList = incrCList[::-1]
 
-
+# PLOT
 plt.figure(figsize=(8, 8))
+plt.suptitle(INFO_PROMPT)
 
 plt.subplot(2, 2, 1)
-conf.set_index(["Country/Region", "Province/State"]).loc[COUNTRY].\
-    iloc[:, -DAYS_TO_LOOK_BACK:].sum().\
-    plot(label=f"confirmed: {format(conf_numbers[-1])}")
+conf_plot = conf.set_index(["Country/Region", "Province/State"]).loc[COUNTRY].\
+    iloc[:, -DAYS_TO_LOOK_BACK:].sum()
+plt.plot_date(pd.to_datetime(conf_plot.keys().values),
+              conf_plot.values, "b",
+              label=f"confirmed: {format(conf_numbers[-1])}")
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%m/%d"))
 plt.title(COUNTRY + " (confirmed)")
 plt.xticks(rotation=45)
 plt.legend()
 
 
 plt.subplot(2, 2, 2)
-death.set_index(["Country/Region", "Province/State"]).loc[COUNTRY].\
-    iloc[:, -DAYS_TO_LOOK_BACK:].sum().\
-    plot(label=f"death: {format(death_numbers[-1])}")
+death_plot = death.set_index(["Country/Region",
+                              "Province/State"]).loc[COUNTRY].\
+    iloc[:, -DAYS_TO_LOOK_BACK:].sum()
+plt.plot_date(pd.to_datetime(death_plot.keys().values),
+              death_plot.values, "r",
+              label=f"death: {format(death_numbers[-1])}")
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%m/%d"))
+
 plt.plot([], [], " ", label="(deaths/conf = {:.2%})"
          .format(death_numbers[-1]/conf_numbers[-1]))
 plt.title(COUNTRY + " (deaths)")
@@ -113,16 +125,8 @@ plt.ylim(0, max(pd.Series(incrCList).mean(),
                 pd.Series(incrDList).mean()) * 3.5)
 plt.legend()
 
+
 plt.subplot(2, 2, 4)
-plt.xticks(())
-plt.yticks(())
-plt.text(0.5, 0.5, INFO_PROMPT, ha='center', va='center',
-         size=13, alpha=1)
-ax = plt.gca()
-ax.spines["top"].set_color('none')
-ax.spines["bottom"].set_color('none')
-ax.spines["left"].set_color('none')
-ax.spines["right"].set_color('none')
 
 
 plt.tight_layout()
