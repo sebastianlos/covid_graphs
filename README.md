@@ -19,6 +19,3 @@ Execute the python-file `covid_graphs.py` from bash, passing two arguments:
 ## Example
 
     $ python covid_graphs.py Germany 100
-
-
-![Germany last 100 days](/example/example_graphs.png "Germany last 100 days")
