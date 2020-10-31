@@ -8,21 +8,19 @@ Created on Sun Mar 15 21:41:33 2020
 
 import sys
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 
 
-def clean_data(df):
+def clean_data(df_x):
     """
     This function cleans and transposes the dataframe.
     """
-    df.set_index(["Country/Region", "Province/State"], inplace=True)
-    df.drop(["Lat", "Long"], axis=1, inplace=True)
-    df = df.transpose()
-    df.index = pd.to_datetime(df.index)
-    df.index.name = "Date"
-    return df
+    df_x.set_index(["Country/Region", "Province/State"], inplace=True)
+    df_x.drop(["Lat", "Long"], axis=1, inplace=True)
+    df_x = df_x.transpose()
+    df_x.index = pd.to_datetime(df_x.index)
+    df_x.index.name = "Date"
+    return df_x
 
 
 # get data from john hopkins university
@@ -80,10 +78,10 @@ plt.title(COUNTRY + " (deaths)")
 
 plt.subplot(2, 1, 2)
 (conf[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].diff()*100 /
-    conf[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:]).\
+ conf[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:]).\
         plot(label="cases growth rate")
 (death[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].diff()*100 /
-    death[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:]).\
+ death[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:]).\
         plot(label="death growth rate")
 plt.title(COUNTRY + " (rates)")
 plt.ylabel("Percentage")
