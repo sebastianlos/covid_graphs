@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
+
 # read files
 conf = pd.read_csv("https://raw.githubusercontent.com/CSSEGISandData/\
 COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/\
@@ -86,55 +87,44 @@ incrCList = incrCList[::-1]
 plt.figure(figsize=(8, 8))
 plt.suptitle(INFO_PROMPT)
 
-plt.subplot(2, 2, 1)
+ax1 = plt.subplot(2, 2, 1)
 conf_plot = conf.set_index(["Country/Region", "Province/State"]).loc[COUNTRY].\
     iloc[:, -DAYS_TO_LOOK_BACK:].sum()
-plt.plot_date(pd.to_datetime(conf_plot.keys().values),
-              conf_plot.values, "b",
-              label=f"confirmed: {format(conf_numbers[-1])}")
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%m/%d"))
-plt.title(COUNTRY + " (confirmed)")
-plt.xticks(rotation=30)
-plt.legend()
+line1, = ax1.plot_date(pd.to_datetime(conf_plot.keys().values),
+                       conf_plot.values, "b",
+                       label=f"confirmed: {format(conf_numbers[-1])}")
+ax1.xaxis.set_major_formatter(mdates.DateFormatter("%m/%d"))
+ax1.set_title(COUNTRY + " (confirmed)")
+ax1.tick_params(axis="x", labelrotation=30)
+ax1.legend()
 
 
-plt.subplot(2, 2, 2)
+ax2 = plt.subplot(2, 2, 2)
 death_plot = death.set_index(["Country/Region",
                               "Province/State"]).loc[COUNTRY].\
     iloc[:, -DAYS_TO_LOOK_BACK:].sum()
-plt.plot_date(pd.to_datetime(death_plot.keys().values),
+ax2.plot_date(pd.to_datetime(death_plot.keys().values),
               death_plot.values, "r",
               label=f"death: {format(death_numbers[-1])}")
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%m/%d"))
-
-plt.plot([], [], " ", label="(deaths/conf = {:.2%})"
+ax2.xaxis.set_major_formatter(mdates.DateFormatter("%m/%d"))
+ax2.plot([], [], " ", label="(deaths/conf = {:.2%})"
          .format(death_numbers[-1]/conf_numbers[-1]))
-plt.title(COUNTRY + " (deaths)")
-plt.xticks(rotation=30)
-plt.legend()
+ax2.set_title(COUNTRY + " (deaths)")
+ax2.tick_params(axis="x", labelrotation=30)
+ax2.legend()
 
 
-plt.subplot(2, 2, 3)
-plt.plot(np.arange(DAYS_TO_LOOK_BACK - 1), incrDList,
+ax3 = plt.subplot(2, 1, 2)
+ax3.plot(np.arange(DAYS_TO_LOOK_BACK - 1), incrDList,
          label="death growth rate")
-plt.plot(np.arange(DAYS_TO_LOOK_BACK - 1), incrCList, label="new cases rate")
-plt.title(COUNTRY + " (rates)")
-plt.xlabel("Days")
-plt.ylabel("Percentage")
+ax3.plot(np.arange(DAYS_TO_LOOK_BACK - 1), incrCList, label="new cases rate")
+ax3.set_title(COUNTRY + " (rates)")
+ax3.set_xlabel("Days")
+ax3.set_ylabel("Percentage")
 # calculating ylim from mean
 # plt.ylim(0, max(pd.Series(incrCList).mean(),
 #                 pd.Series(incrDList).mean()) * 3.5)
-plt.legend()
-
-
-plt.subplot(2, 2, 4)
-plt.xticks(())
-plt.yticks(())
-ax = plt.gca()
-ax.spines["top"].set_color('none')
-ax.spines["bottom"].set_color('none')
-ax.spines["left"].set_color('none')
-ax.spines["right"].set_color('none')
+ax3.legend()
 
 plt.tight_layout()
 plt.show()
