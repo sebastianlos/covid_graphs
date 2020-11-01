@@ -23,6 +23,8 @@ def clean_data(df_x):
     return df_x
 
 
+plt.style.use("seaborn-bright")
+
 # get data from john hopkins university
 conf = pd.read_csv("https://raw.githubusercontent.com/CSSEGISandData/\
 COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/\
@@ -65,7 +67,7 @@ conf = clean_data(conf)
 death = clean_data(death)
 
 # PLOT
-plt.figure(figsize=(8, 8))
+plt.figure(figsize=(10, 8))
 plt.suptitle(INFO_PROMPT)
 
 plt.subplot(3, 2, 1)
@@ -75,21 +77,23 @@ plt.xlabel("")
 plt.title("Cases, accumulated")
 
 plt.subplot(3, 2, 2)
-death[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].plot(color="r")
+death[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].\
+    plot(ax=plt.gca(), color="r")
 plt.xlabel("")
 plt.title("Deaths, accumulated")
 
 plt.subplot(3, 1, 2)
 (conf[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].diff()*100 /
  conf[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:]).\
-        plot(label="cases growth rate")
+        plot(ax=plt.gca(), label="cases growth rate", color="b")
 (death[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].diff()*100 /
  death[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:]).\
-        plot(label="death growth rate")
+        plot(ax=plt.gca(), label="death growth rate", color="r")
 plt.title("Rates of growth in percent")
 plt.ylabel("Percentage")
 plt.xlabel("")
 plt.legend()
+plt.grid(True)
 
 plt.subplot(3, 2, 5)
 conf[COUNTRY][-DAYS_TO_LOOK_BACK:].diff().\
