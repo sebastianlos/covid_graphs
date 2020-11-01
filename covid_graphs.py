@@ -58,7 +58,7 @@ if DAYS_TO_LOOK_BACK > days_available:
 
 chosen_days = dates[days_available - (DAYS_TO_LOOK_BACK):]
 INFO_PROMPT = "Data for {} for last {} days\
-\n(Last data ingestion: {})"\
+\n(Last ingestion: {})"\
     .format(COUNTRY, DAYS_TO_LOOK_BACK, chosen_days[-1])
 
 conf = clean_data(conf)
@@ -68,24 +68,40 @@ death = clean_data(death)
 plt.figure(figsize=(8, 8))
 plt.suptitle(INFO_PROMPT)
 
-plt.subplot(2, 2, 1)
-conf[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].plot(color="b")
-plt.title(COUNTRY + " (confirmed)")
+plt.subplot(3, 2, 1)
+conf[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].\
+    plot(ax=plt.gca(), color="b")
+plt.xlabel("")
+plt.title("Cases, accumulated")
 
-plt.subplot(2, 2, 2)
+plt.subplot(3, 2, 2)
 death[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].plot(color="r")
-plt.title(COUNTRY + " (deaths)")
+plt.xlabel("")
+plt.title("Deaths, accumulated")
 
-plt.subplot(2, 1, 2)
+plt.subplot(3, 1, 2)
 (conf[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].diff()*100 /
  conf[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:]).\
         plot(label="cases growth rate")
 (death[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].diff()*100 /
  death[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:]).\
         plot(label="death growth rate")
-plt.title(COUNTRY + " (rates)")
+plt.title("Rates of growth in percent")
 plt.ylabel("Percentage")
+plt.xlabel("")
 plt.legend()
+
+plt.subplot(3, 2, 5)
+conf[COUNTRY][-DAYS_TO_LOOK_BACK:].diff().\
+    plot(ax=plt.gca(), color="b", legend=False)
+plt.xlabel("")
+plt.title("New cases per day")
+
+plt.subplot(3, 2, 6)
+plt.title("New deaths per day")
+death[COUNTRY][-DAYS_TO_LOOK_BACK:].diff().\
+    plot(ax=plt.gca(), color="r", legend=False)
+plt.xlabel("")
 
 plt.tight_layout()
 plt.show()
