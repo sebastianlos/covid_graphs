@@ -6,9 +6,26 @@ Created on Sun Mar 15 21:41:33 2020
 @author: sloschert
 """
 
-import sys
+import argparse
+import textwrap
 import pandas as pd
 import matplotlib.pyplot as plt
+
+parser = argparse.ArgumentParser(
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    description=textwrap.dedent("""Statistical graphs about the current state \
+of Covid-19.
+The data is based on JHU CSSE COVID-19\
+Data from the John Hopkins University."""))
+parser.add_argument("-c", "--country",
+                    help="The country you want to receive data about.",
+                    type=str,
+                    default="Germany")
+parser.add_argument("-d", "--days",
+                    help="The time span (days) you want to look back.",
+                    type=int,
+                    default=100)
+args = parser.parse_args()
 
 
 def clean_data(df_x):
@@ -36,23 +53,8 @@ time_series_covid19_deaths_global.csv")
 dates = conf.columns[4:]
 days_available = len(dates)
 
-DEFAULT_COUNTRY = "Germany"
-DEFAULT_DAYS = 100
-COUNTRY = DEFAULT_COUNTRY
-DAYS_TO_LOOK_BACK = DEFAULT_DAYS
-
-# user input
-if len(sys.argv) == 2:
-    COUNTRY = sys.argv[1]
-    DAYS_TO_LOOK_BACK = DEFAULT_DAYS
-    print("setting days to default value")
-elif len(sys.argv) > 2:
-    COUNTRY = sys.argv[1]
-    DAYS_TO_LOOK_BACK = int(sys.argv[2])
-else:
-    COUNTRY = DEFAULT_COUNTRY
-    DAYS_TO_LOOK_BACK = DEFAULT_DAYS
-    print("setting days and country to default values")
+COUNTRY = args.country
+DAYS_TO_LOOK_BACK = args.days
 
 if DAYS_TO_LOOK_BACK > days_available:
     DAYS_TO_LOOK_BACK = days_available
@@ -96,14 +98,14 @@ plt.legend()
 plt.grid(True)
 
 plt.subplot(3, 2, 5)
-conf[COUNTRY][-DAYS_TO_LOOK_BACK:].diff().\
+conf[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].diff().\
     plot(ax=plt.gca(), color="b", legend=False)
 plt.xlabel("")
 plt.title("New cases per day")
 
 plt.subplot(3, 2, 6)
 plt.title("New deaths per day")
-death[COUNTRY][-DAYS_TO_LOOK_BACK:].diff().\
+death[COUNTRY].apply(sum, axis=1)[-DAYS_TO_LOOK_BACK:].diff().\
     plot(ax=plt.gca(), color="r", legend=False)
 plt.xlabel("")
 
