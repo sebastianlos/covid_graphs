@@ -18,6 +18,6 @@ Execute the python-file `covid_graphs.py`, passing two arguments:
 
 ## Example
 
-    $ python covid_graphs.py -c Germany -d 100
-    
+    $ python covid_graphs.py Germany 100
+
 ![Graph Germany last 100 days](https://github.com/sloschert/covid_graphs/blob/master/img/covid_graphs.png?raw=True)    
