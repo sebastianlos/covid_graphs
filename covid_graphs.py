@@ -28,7 +28,7 @@ args = parser.parse_args()
 
 def clean_data(df_x):
     """
-    This function cleans and transposes the dataframe.
+    This function cleans and transposes the original dataframe.
     """
     df_x.set_index(["Country/Region", "Province/State"], inplace=True)
     df_x.drop(["Lat", "Long"], axis=1, inplace=True)
@@ -40,7 +40,6 @@ def clean_data(df_x):
 
 plt.style.use("seaborn-bright")
 
-# get data from john hopkins university
 conf = pd.read_csv("https://raw.githubusercontent.com/CSSEGISandData/\
 COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/\
 time_series_covid19_confirmed_global.csv")
@@ -66,7 +65,6 @@ INFO_PROMPT = "Data for {} for last {} days\
 conf = clean_data(conf)
 death = clean_data(death)
 
-# PLOT
 plt.figure(figsize=(10, 8))
 plt.suptitle(INFO_PROMPT)
 
