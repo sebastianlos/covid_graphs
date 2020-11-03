@@ -17,14 +17,12 @@ parser = argparse.ArgumentParser(
 of Covid-19.
 The data is based on JHU CSSE COVID-19\
 Data from the John Hopkins University."""))
-parser.add_argument("-c", "--country",
+parser.add_argument("country",
                     help="The country you want to receive data about.",
-                    type=str,
-                    default="Germany")
-parser.add_argument("-d", "--days",
+                    type=str)
+parser.add_argument("days",
                     help="The time span (days) you want to look back.",
-                    type=int,
-                    default=100)
+                    type=int)
 args = parser.parse_args()
 
 
